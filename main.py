@@ -32,7 +32,7 @@ ffprobePath = "ffmpeg/ffmpeg-n4.4.4-94-g5d07afd482-win64-lgpl-shared-4.4/bin/ffp
 
 home = os.path.expanduser("~")
 cwd = home + "/PaceClipper"
-version = "1.0.0-beta1"
+version = "1.0.0"
 
 nvenc = False
 downloaded = False
