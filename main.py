@@ -39,7 +39,7 @@ ffprobePath = "ffmpeg/ffmpeg-n4.4.4-94-g5d07afd482-win64-lgpl-shared-4.4/bin/ffp
 
 home = os.path.expanduser("~")
 cwd = home + "/PaceClipper"
-version = "1.1.0"
+version = "1.1.1"
 
 nvenc = False
 downloaded = False
@@ -96,7 +96,7 @@ class App(customtkinter.CTk, AsyncCTk):
         self.bgImageLabel.place(x=0, y=0, relwidth=1, relheight=1)
 
         customtkinter.CTkLabel(self, text="Settings",
-                               font=("Minecraftia", 16), fg_color="#3E3548",
+                               font=("Minecraftia", 16), fg_color="#3E3548", text_color="#FFFFFF",
                                bg_color="#3E3548").place(x=425, y=10)
 
         self.obsFolder = customtkinter.CTkButton(self, text="OBS Folder", font=("Minecraftia", 16),
@@ -147,7 +147,7 @@ class App(customtkinter.CTk, AsyncCTk):
 
         vcmd = (self.register(self.setName), '%P')
         self.nameInput = customtkinter.CTkEntry(self, font=("Minecraftia", 16), textvariable=self.name, width=220,
-                                                height=36, fg_color="#3E3548", bg_color="#3E3548",
+                                                height=36, fg_color="#3E3548", bg_color="#3E3548", text_color="#FFFFFF",
                                                 border_color="#867396", border_width=1,
                                                 corner_radius=0, validatecommand=vcmd, validate="key")
         self.nameInput.place(x=130, y=106)
@@ -174,7 +174,7 @@ class App(customtkinter.CTk, AsyncCTk):
         customtkinter.CTkButton(self, text="", width=465, height=1, bg_color="#796d82").place(x=26, y=155)
 
         customtkinter.CTkLabel(self, text="Trimming",
-                               font=("Minecraftia", 16), fg_color="#3E3548",
+                               font=("Minecraftia", 16), fg_color="#3E3548", text_color="#FFFFFF",
                                bg_color="#3E3548").place(x=425, y=158)
 
         self.fetchButton = customtkinter.CTkButton(
@@ -187,7 +187,7 @@ class App(customtkinter.CTk, AsyncCTk):
         customtkinter.CTkButton(self, text="", width=465, height=1, bg_color="#796d82").place(x=26, y=315)
 
         customtkinter.CTkLabel(self, text="Clipping",
-                               font=("Minecraftia", 16), fg_color="#3E3548",
+                               font=("Minecraftia", 16), fg_color="#3E3548", text_color="#FFFFFF",
                                bg_color="#3E3548").place(x=425, y=318)
 
         self.outButton = customtkinter.CTkButton(self, text="Open output folder", font=("Arial", 16),
@@ -195,7 +195,7 @@ class App(customtkinter.CTk, AsyncCTk):
 
         self.loadingLabel = customtkinter.CTkLabel(
             self, text="Loading...",
-            font=("Minecraftia", 16), fg_color="#3E3548",
+            font=("Minecraftia", 16), fg_color="#3E3548", text_color="#FFFFFF",
             bg_color="#3E3548")
         self.loadingLabel.place(x=155, y=166)
 
@@ -237,11 +237,11 @@ class App(customtkinter.CTk, AsyncCTk):
         self.endSplitButton.lower(self.startSplit)
 
         self.startLabel = customtkinter.CTkLabel(
-            self, text="Start: ", font=("Minecraftia", 16), width=60, height=30, fg_color="#3E3548", bg_color="#3E3548")
+            self, text="Start: ", font=("Minecraftia", 16), width=60, height=30, fg_color="#3E3548", bg_color="#3E3548", text_color="#FFFFFF")
         self.endLabel = customtkinter.CTkLabel(
-            self, text="End: ", font=("Minecraftia", 16), width=60, fg_color="#3E3548", bg_color="#3E3548")
+            self, text="End: ", font=("Minecraftia", 16), width=60, fg_color="#3E3548", bg_color="#3E3548", text_color="#FFFFFF")
         self.runLabel = customtkinter.CTkLabel(
-            self, text="Run: ", font=("Minecraftia", 16), height=30, width=60, fg_color="#3E3548", bg_color="#3E3548")
+            self, text="Run: ", font=("Minecraftia", 16), height=30, width=60, fg_color="#3E3548", bg_color="#3E3548", text_color="#FFFFFF")
 
         self.watchBtn = customtkinter.CTkButton(
             self, text="Watch", font=("Minecraftia", 18), width=100, height=45, corner_radius=0,
@@ -255,36 +255,36 @@ class App(customtkinter.CTk, AsyncCTk):
 
         self.smoothButton = customtkinter.CTkCheckBox(self, text="Blend down to 60 fps", font=("Minecraftia", 16),
                                                       command=self.update_smoothing, variable=self.smoothing,
-                                                      onvalue="on", offvalue="off", bg_color="#3E3548",
-                                                      fg_color="#555577", hover_color="#b2a6bf")
+                                                      onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                      fg_color="#555577", hover_color="#493e54", text_color="#FFFFFF")
 
         self.trackLabel = customtkinter.CTkLabel(
-            self, text="Audio tracks:", font=("Minecraftia", 16), width=0, height=0, fg_color="#3E3548", bg_color="#3E3548")
+            self, text="Audio tracks:", font=("Minecraftia", 16), width=0, height=0, fg_color="#3E3548", bg_color="#3E3548", text_color="#FFFFFF")
 
 
         self.trackOpt1 = customtkinter.CTkCheckBox(self, text="1", font=("Minecraftia", 16),
                                                       command=self.updateTracks, variable=self.track1,
-                                                      onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                      onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                       fg_color="#555577", hover_color="#493e54", width=0)
         self.trackOpt2 = customtkinter.CTkCheckBox(self, text="2", font=("Minecraftia", 16),
                                                    command=self.updateTracks, variable=self.track2,
-                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                    fg_color="#555577", hover_color="#493e54", width=0)
         self.trackOpt3 = customtkinter.CTkCheckBox(self, text="3", font=("Minecraftia", 16),
                                                    command=self.updateTracks, variable=self.track3,
-                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                    fg_color="#555577", hover_color="#493e54", width=0)
         self.trackOpt4 = customtkinter.CTkCheckBox(self, text="4", font=("Minecraftia", 16),
                                                    command=self.updateTracks, variable=self.track4,
-                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                    fg_color="#555577", hover_color="#493e54", width=0)
         self.trackOpt5 = customtkinter.CTkCheckBox(self, text="5", font=("Minecraftia", 16),
                                                    command=self.updateTracks, variable=self.track5,
-                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                    fg_color="#555577", hover_color="#493e54", width=0)
         self.trackOpt6 = customtkinter.CTkCheckBox(self, text="6", font=("Minecraftia", 16),
                                                    command=self.updateTracks, variable=self.track6,
-                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+                                                   onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf", text_color="#FFFFFF",
                                                    fg_color="#555577", hover_color="#493e54", width=0)
 
         self.pacemanButton = customtkinter.CTkButton(
