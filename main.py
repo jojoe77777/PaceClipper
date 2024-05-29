@@ -34,12 +34,12 @@ def getResourcePath(name):
 runData = {}
 
 vlcPath = "vlc/vlc-3.0.20/vlc.exe"
-ffmpegPath = "ffmpeg/ffmpeg-n4.4.4-94-g5d07afd482-win64-lgpl-shared-4.4/bin/ffmpeg.exe"
-ffprobePath = "ffmpeg/ffmpeg-n4.4.4-94-g5d07afd482-win64-lgpl-shared-4.4/bin/ffprobe.exe"
+ffmpegPath = "ffmpeg/ffmpeg-n5.1-latest-win64-lgpl-shared-5.1/bin/ffmpeg.exe"
+ffprobePath = "ffmpeg/ffmpeg-n5.1-latest-win64-lgpl-shared-5.1/bin/ffprobe.exe"
 
 home = os.path.expanduser("~")
 cwd = home + "/PaceClipper"
-version = "1.1.1"
+version = "1.2"
 
 nvenc = False
 downloaded = False
@@ -90,6 +90,7 @@ class App(customtkinter.CTk, AsyncCTk):
         self.track5 = customtkinter.StringVar(value="on")
         self.track6 = customtkinter.StringVar(value="on")
         self.smoothing = customtkinter.StringVar(value="off")
+        self.fortOnly = customtkinter.StringVar(value="off")
 
         self.bgImage = customtkinter.CTkImage(Image.open(getResourcePath("bg.jpg")), size=(520, 500))
         self.bgImageLabel = customtkinter.CTkLabel(self, text="", image=self.bgImage)
@@ -184,6 +185,13 @@ class App(customtkinter.CTk, AsyncCTk):
             command=self.fetch)
         self.fetchButton.place(x=16, y=162)
 
+        self.fortButton = customtkinter.CTkCheckBox(self, text="2nd Struct", font=("Minecraftia", 16),
+              command=self.updateFort, variable=self.fortOnly,
+              onvalue="on", offvalue="off", bg_color="#3E3548", border_color="#b2a6bf",
+              fg_color="#555577", hover_color="#493e54", text_color="#FFFFFF")
+        CTkToolTip(self.fortButton, "Only show runs with 2 structures", follow=True, delay=0, font=("Minecraftia", 12),
+                   border_color="#2e1e3b", border_width=2)
+
         customtkinter.CTkButton(self, text="", width=465, height=1, bg_color="#796d82").place(x=26, y=315)
 
         customtkinter.CTkLabel(self, text="Clipping",
@@ -202,7 +210,7 @@ class App(customtkinter.CTk, AsyncCTk):
         self.runList = customtkinter.CTkOptionMenu(
             self, values=[""], font=("Minecraftia", 12), dropdown_font=("Minecraftia", 12), command=self.selectRun,
             bg_color="#3E3548", fg_color="#3E3548", button_color="#524c59", button_hover_color="#756c7f",
-            dropdown_fg_color="#3E3548", dropdown_hover_color="#524c59",
+            dropdown_fg_color="#3E3548", dropdown_hover_color="#524c59", width=258, dynamic_resizing=False
         )
 
         self.runListButton = customtkinter.CTkButton(self, text="", font=("Minecraftia", 16),
@@ -291,6 +299,8 @@ class App(customtkinter.CTk, AsyncCTk):
             self, text="PaceMan", font=("Minecraftia", 16), width=100, height=32, corner_radius=0,
             fg_color="#3E3548", bg_color="#3E3548", hover_color="#493e54",
             border_color="#b2a6bf", border_width=2, command=self.openPaceman)
+        CTkToolTip(self.pacemanButton, "Open run on PaceMan", follow=True, delay=0, font=("Minecraftia", 12),
+                   border_color="#2e1e3b", border_width=2)
 
     def getCenteredPosition(self, width, height):
         screenWidth = self.winfo_screenwidth()
@@ -307,6 +317,10 @@ class App(customtkinter.CTk, AsyncCTk):
 
     def update_smoothing(self):
         settings["doSmoothing"] = self.smoothButton.get() == "on"
+        self.save_settings()
+
+    def updateFort(self):
+        settings["fortOnly"] = self.fortOnly.get() == "on"
         self.save_settings()
 
     def updateTracks(self):
@@ -415,10 +429,10 @@ class App(customtkinter.CTk, AsyncCTk):
         await self.download_with_progress(vlc_url, "vlc.zip", "vlc", vlcPath,
                                           "d22155d8330f99f2050e8fe3fd2b8e85104ba7f899a875c21f92a97cbdfbb7c5")
 
-        ffmpeg_url = "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2024-03-30-12-47/ffmpeg-n4.4.4-94-g5d07afd482-win64-lgpl-shared-4.4.zip"
+        ffmpeg_url = "https://github.com/jojoe77777/PaceClipper/releases/download/0.0.1/ffmpeg-n5.1-latest-win64-lgpl-shared-5.1.zip"
         await self.download_with_progress(ffmpeg_url, "ffmpeg.zip", "ffmpeg",
                                           ffmpegPath,
-                                          "5cef674974681aeb78cf8f68631531e5ac9a19ccb74525aaacc4a933534c14ec")
+                                          "a1d69670efdd2d5f453879a187a0dae94f649612aa143a234474b42667bfd473")
 
         nvenc = "cuda" in check_output(
             [ffmpegPath, "-hide_banner", "-init_hw_device", "list"]).decode("utf-8")
@@ -448,6 +462,7 @@ class App(customtkinter.CTk, AsyncCTk):
                 "track4": True,
                 "track5": True,
                 "track6": True,
+                "fort_only": False
             }
             settings = default_settings
             self.save_settings()
@@ -461,6 +476,7 @@ class App(customtkinter.CTk, AsyncCTk):
         self.track4.set("on" if "track4" in settings and settings["track4"] else "off")
         self.track5.set("on" if "track5" in settings and settings["track5"] else "off")
         self.track6.set("on" if "track6" in settings and settings["track6"] else "off")
+        self.fortOnly.set("on" if "fortOnly" in settings and settings["fortOnly"] else "off")
         startOffset = settings["startOffset"]
         endOffset = settings["endOffset"]
 
@@ -749,6 +765,9 @@ class App(customtkinter.CTk, AsyncCTk):
         self.trackOpt6.place(x=0, y=999)
         self.trackLabel.place(x=0, y=999)
         self.pacemanButton.place(x=0, y=999)
+        self.fortButton.place(x=0, y=999)
+
+        self.loadingLabel.place(x=155, y=166)
 
     def showThings(self):
         self.runLabel.place(x=12, y=203)
@@ -782,6 +801,9 @@ class App(customtkinter.CTk, AsyncCTk):
         self.trackLabel.place(x=16, y=390)
 
         self.pacemanButton.place(x=352, y=203)
+        self.fortButton.place(x=150, y=168)
+
+        self.loadingLabel.place(x=0, y=999)
 
     @async_handler
     async def fetch(self):
@@ -791,8 +813,9 @@ class App(customtkinter.CTk, AsyncCTk):
 
         name = self.nameInput.get()
         loop = asyncio.get_event_loop()
+        fortOnly = "true" if self.fortOnly.get() == "on" else "false"
         r = await loop.run_in_executor(None, requests.get,
-                                       f"https://paceman.gg/stats/api/getRecentTimestamps/?name={name}")
+                                       f"https://paceman.gg/stats/api/getRecentTimestamps/?name={name}&onlyFort={fortOnly}")
         if r.status_code != 200:
             self.loadingLabel.configure(text="Invalid username")
             return
@@ -806,23 +829,17 @@ class App(customtkinter.CTk, AsyncCTk):
         splitOptions = []
         for run in data:
             i += 1
-            if "realUpdate" in run:
+            if "realUpdate" in run and run['realUpdate'] is not None:
                 run['reset'] = run['realUpdate']
             else:
                 run['reset'] = run['lastUpdated']
-            lastSplit = 'nether'
             for split in ['start', 'nether', 'bastion', 'fortress', 'first_portal', 'stronghold', 'end', 'finish']:
                 if run[split] is not None:
-                    lastSplit = split
                     if i == 1:
                         splitOptions.append(split)
 
-            start = run['start'] - settings['startOffset']
-            seconds = round(run[lastSplit] - settings['startOffset'] - start)
-            m, s = divmod(seconds, 60)
-            h, m = divmod(m, 60)
             lastUpdated = datetime.datetime.fromtimestamp(run['lastUpdated']).strftime('%H:%M %d/%m/%y')
-            name = f"{m:01d}:{s:02d} {idToName(lastSplit)} {lastUpdated}"
+            name = f"{run['runName']} {lastUpdated}"
             runs.append(name)
             runData[name] = run
 
